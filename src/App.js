@@ -5,7 +5,8 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <canvas id="stage" width="600px" height="600px">
+        <div className="Point"> <p id="points_game">Pontuação: 0</p></div>
+        <canvas id="stage" className="Stage" width="600px" height="600px">
         </canvas>
       </div>
     );
@@ -17,7 +18,7 @@ window.onload = function () {
   var ctx = stage.getContext("2d");
 
   document.addEventListener("keydown", keyPush);
-  setInterval(game, 90);
+  setInterval(game, 60);
 
   const vel = 1;
 
@@ -29,6 +30,7 @@ window.onload = function () {
   var quantityS = 30;
   var appleX = 15;
   var appleY = 15;
+  var points = 0;
 
   var trail = [];
   var tail = 5
@@ -61,13 +63,14 @@ window.onload = function () {
 
     for (var i = 0; i < trail.length; i++) {
       ctx.fillRect(trail[i].x * lenghtS, trail[i].y * lenghtS,
-        lenghtS, lenghtS);
+        lenghtS - 1, lenghtS - 1);
 
-      if (trail[i].i === pointX && trail[i].y === pointY) {
+      if (trail[i].x === pointX && trail[i].y === pointY) {
         velX = 0;
         velY = 0;
         tail = 5;
-        alert("Game over");
+        points = 0;
+        atualizarPontos(points);
       }
     }
 
@@ -78,6 +81,8 @@ window.onload = function () {
 
     if (appleX === pointX && appleY === pointY) {
       tail++;
+      points++;
+      atualizarPontos(points);
       appleX = Math.floor(Math.random() * quantityS);
       appleY = Math.floor(Math.random() * quantityS);
     }
@@ -105,6 +110,10 @@ window.onload = function () {
       //do nothing
     }
   }
+}
+
+function atualizarPontos(points) {
+  document.getElementById('points_game').innerHTML = "Pontuação: " + points;
 }
 
 export default App;
