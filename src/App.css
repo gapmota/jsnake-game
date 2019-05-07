@@ -13,14 +13,14 @@
   color: white;
 }
 
-.Point{
+.Point {
   position: relative;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: -2vh;
+  margin-bottom: -1vh;
   background-color: black;
   color: white;
 }
 
-.Stage{
-  border: 5px solid white;
+.Stage {
+  border: 4px solid white;
 }
