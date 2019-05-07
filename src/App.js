@@ -34,6 +34,7 @@ window.onload = function () {
 
   var trail = [];
   var tail = 5
+  var aux = 0;
 
   function game() {
 
@@ -66,11 +67,8 @@ window.onload = function () {
         lenghtS - 1, lenghtS - 1);
 
       if (trail[i].x === pointX && trail[i].y === pointY) {
-        velX = 0;
-        velY = 0;
-        tail = 5;
-        points = 0;
-        atualizarPontos(points);
+        deadSnake();
+        updatePoints(points);
       }
     }
 
@@ -82,7 +80,7 @@ window.onload = function () {
     if (appleX === pointX && appleY === pointY) {
       tail++;
       points++;
-      atualizarPontos(points);
+      updatePoints(points);
       appleX = Math.floor(Math.random() * quantityS);
       appleY = Math.floor(Math.random() * quantityS);
     }
@@ -91,29 +89,58 @@ window.onload = function () {
   function keyPush(event) {
     switch (event.keyCode) {
       case 37: // Left
-        velX = -vel;
-        velY = 0;
-        break;
+        if (aux === 37) {
+          break;
+        } else {
+          velX = -vel;
+          velY = 0;
+          aux = 39;
+          break;
+        }
       case 38: // Up
-        velX = 0;
-        velY = -vel;
-        break;
+        if (aux === 38) {
+          break;
+        } else {
+          velX = 0;
+          velY = -vel;
+          aux = 40;
+          break;
+        }
       case 39: // Right
-        velX = vel;
-        velY = 0;
-        break;
+        if (aux === 39) {
+          break;
+        } else {
+          velX = vel;
+          velY = 0;
+          aux = 37;
+          break;
+        }
       case 40: // Down
-        velX = 0;
-        velY = vel;
-        break;
+        if (aux === 40) {
+          break;
+        } else {
+          velX = 0;
+          velY = vel;
+          aux = 38;
+          break;
+        }
       default:
       //do nothing
     }
   }
+
+  function deadSnake() {
+    velX = 0;
+    velY = 0;
+    tail = 5;
+    points = 0;
+    aux = 0;
+  }
 }
 
-function atualizarPontos(points) {
+function updatePoints(points) {
   document.getElementById('points_game').innerHTML = "Pontuação: " + points;
 }
+
 
 export default App;
