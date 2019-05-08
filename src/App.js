@@ -57,20 +57,29 @@ window.onload = function () {
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, stage.width, stage.height);
 
-    ctx.fillStyle = "red";
+    var img = new Image(20, 20);
+    img.src = 'https://cdn-ak.f.st-hatena.com/images/fotolife/r/riboni5235/20170217/20170217105752.png';
+    var ptrn = ctx.createPattern(img, 'repeat');
+    ctx.fillStyle = ptrn;
     ctx.fillRect(appleX * lenghtS, appleY * lenghtS, lenghtS, lenghtS);
 
-    ctx.fillStyle = "gray";
-
+    ctx.beginPath();
+    ctx.fillStyle = "green";
+    ctx.strokeStyle = "black";
     for (var i = 0; i < trail.length; i++) {
-      ctx.fillRect(trail[i].x * lenghtS, trail[i].y * lenghtS,
-        lenghtS - 1, lenghtS - 1);
+      ctx.arc((trail[i].x * lenghtS) + 10, (trail[i].y * lenghtS) + 10,
+        lenghtS - 10, 0, 2 * Math.PI, false);
+      ctx.fill();
+      ctx.stroke();
+      ctx.closePath();
 
       if (trail[i].x === pointX && trail[i].y === pointY) {
         deadSnake();
         updatePoints(points);
       }
     }
+
+
 
     trail.push({ x: pointX, y: pointY });
     while (trail.length > tail) {
