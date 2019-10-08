@@ -13,28 +13,32 @@ class App extends Component {
   }
 }
 
-window.onload = function () {
+var screenLimit = 30;
+
+var appleX = 15;
+var appleY = 15;
+
+const snakeVelocity = 1;
+
+var velX = 0;
+var velY = 0;
+
+var pointX = 10;
+var pointY = 15;
+
+var lenghtS = 20;
+var points = 0;
+
+var trail = [];
+var tail = 5
+var aux = 0;
+
+window.onload =  () => {
   var stage = document.getElementById('stage');
   var ctx = stage.getContext("2d");
 
   document.addEventListener("keydown", keyPush);
-  setInterval(game, 60);
-
-  const vel = 1;
-
-  var velX = 0;
-  var velY = 0;
-  var pointX = 10;
-  var pointY = 15;
-  var lenghtS = 20;
-  var quantityS = 30;
-  var appleX = 15;
-  var appleY = 15;
-  var points = 0;
-
-  var trail = [];
-  var tail = 5
-  var aux = 0;
+  setInterval(game, 100);
 
   function game() {
 
@@ -42,15 +46,15 @@ window.onload = function () {
     pointY += velY;
 
     if (pointX < 0) {
-      pointX = quantityS - 1;
+      pointX = screenLimit - 1;
     }
-    if (pointX > quantityS - 1) {
+    if (pointX > screenLimit - 1) {
       pointX = 0;
     }
     if (pointY < 0) {
-      pointY = quantityS - 1;
+      pointY = screenLimit - 1;
     }
-    if (pointY > quantityS - 1) {
+    if (pointY > screenLimit - 1) {
       pointY = 0;
     }
 
@@ -66,6 +70,7 @@ window.onload = function () {
     ctx.beginPath();
     ctx.fillStyle = "green";
     ctx.strokeStyle = "black";
+    
     for (var i = 0; i < trail.length; i++) {
       ctx.arc((trail[i].x * lenghtS) + 10, (trail[i].y * lenghtS) + 10,
         lenghtS - 10, 0, 2 * Math.PI, false);
@@ -73,15 +78,14 @@ window.onload = function () {
       ctx.stroke();
       ctx.closePath();
 
-      if (trail[i].x === pointX && trail[i].y === pointY) {
-        deadSnake();
-        updatePoints(points);
+      if(isDeadSnake(trail[i].x, trail[i].y)){
+        resetGame()
+        randomizeAppleLocation()
       }
     }
 
-
-
     trail.push({ x: pointX, y: pointY });
+    
     while (trail.length > tail) {
       trail.shift();
     }
@@ -90,8 +94,7 @@ window.onload = function () {
       tail++;
       points++;
       updatePoints(points);
-      appleX = Math.floor(Math.random() * quantityS);
-      appleY = Math.floor(Math.random() * quantityS);
+      randomizeAppleLocation();
     }
   }
 
@@ -101,7 +104,7 @@ window.onload = function () {
         if (aux === 37) {
           break;
         } else {
-          velX = -vel;
+          velX = -snakeVelocity;
           velY = 0;
           aux = 39;
           break;
@@ -111,7 +114,7 @@ window.onload = function () {
           break;
         } else {
           velX = 0;
-          velY = -vel;
+          velY = -snakeVelocity;
           aux = 40;
           break;
         }
@@ -119,7 +122,7 @@ window.onload = function () {
         if (aux === 39) {
           break;
         } else {
-          velX = vel;
+          velX = snakeVelocity;
           velY = 0;
           aux = 37;
           break;
@@ -129,7 +132,7 @@ window.onload = function () {
           break;
         } else {
           velX = 0;
-          velY = vel;
+          velY = snakeVelocity;
           aux = 38;
           break;
         }
@@ -137,14 +140,27 @@ window.onload = function () {
       //do nothing
     }
   }
+}
 
-  function deadSnake() {
+const EXTREMIRY = 0
+
+const isDeadSnake = (x, y) => {
+  return ((x === EXTREMIRY || y === EXTREMIRY) || (x === pointX && y === pointY)) ? true : false
+}
+
+const resetGame = (x, y) => {
     velX = 0;
     velY = 0;
-    tail = 5;
-    points = 0;
+    pointX = 10;
+    pointY = 15;
+    trail = [];
+    tail = 5
     aux = 0;
-  }
+}
+
+const randomizeAppleLocation = () => {
+  appleX = Math.floor(Math.random() * screenLimit);
+  appleY = Math.floor(Math.random() * screenLimit);
 }
 
 function updatePoints(points) {
